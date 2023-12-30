@@ -34,7 +34,7 @@
     "build:benchmark": "yarn build --filter=formik",
     "build:codesandbox": "yarn build --filter='./packages/*'",
     "prepublish": "turbo run build --filter='./packages/*'",
-    "format": "prettier --write 'examples/**/*' 'packages/*/src/**/*' 'website/src/**/*.{ts,tsx,js,jsx,md,mdx}' 'app/pages/**/*'  'packages/*/test/**/*' 'README.md'",
+    "format": "prettier --experimental-ternaries --write 'examples/**/*' 'packages/*/src/**/*' 'website/src/**/*.{ts,tsx,js,jsx,md,mdx}' 'app/pages/**/*'  'packages/*/test/**/*' 'README.md'",
     "changeset": "changeset",
     "release": "changeset publish",
     "git-reset": "git reset --hard HEAD",
