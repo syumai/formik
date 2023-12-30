@@ -13,8 +13,8 @@ module.exports = async function (src) {
 
 export default function Wrapper ({ children, ...props }) { return (
   <Layout${layout} meta={${JSON.stringify(
-      data
-    )}} {...props}>{children}</Layout${layout}>
+    data
+  )}} {...props}>{children}</Layout${layout}>
 );
 }
 

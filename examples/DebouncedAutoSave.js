@@ -21,11 +21,11 @@ const AutoSave = ({ debounceMs }) => {
 
   return (
     <>
-      {!!formik.isSubmitting
-        ? 'saving...'
-        : lastSaved !== null
-        ? `Last Saved: ${lastSaved}`
-        : null}
+      {!!formik.isSubmitting ?
+        'saving...'
+      : lastSaved !== null ?
+        `Last Saved: ${lastSaved}`
+      : null}
     </>
   );
 };

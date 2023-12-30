@@ -20,12 +20,16 @@ const TextInputLiveFeedback = ({ label, helpText, ...props }) => {
   return (
     <div
       className={`form-control ${
-        showFeedback ? (meta.error ? 'invalid' : 'valid') : ''
+        showFeedback ?
+          meta.error ?
+            'invalid'
+          : 'valid'
+        : ''
       }`}
     >
       <div className="flex items-center space-between">
         <label htmlFor={props.id}>{label}</label>{' '}
-        {showFeedback ? (
+        {showFeedback ?
           <div
             id={`${props.id}-feedback`}
             aria-live="polite"
@@ -33,7 +37,7 @@ const TextInputLiveFeedback = ({ label, helpText, ...props }) => {
           >
             {meta.error ? meta.error : '✓'}
           </div>
-        ) : null}
+        : null}
       </div>
       <input
         {...props}

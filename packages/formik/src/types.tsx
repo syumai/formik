@@ -12,26 +12,28 @@ export interface FormikValues {
  * Should always be an object of strings, but any is allowed to support i18n libraries.
  */
 export type FormikErrors<Values> = {
-  [K in keyof Values]?: Values[K] extends any[]
-    ? Values[K][number] extends object // [number] is the special sauce to get the type of array's element. More here https://github.com/Microsoft/TypeScript/pull/21316
-      ? FormikErrors<Values[K][number]>[] | string | string[]
-      : string | string[]
-    : Values[K] extends object
-    ? FormikErrors<Values[K]>
-    : string;
+  [K in keyof Values]?: Values[K] extends any[] ?
+    Values[K][number] extends (
+      object // [number] is the special sauce to get the type of array's element. More here https://github.com/Microsoft/TypeScript/pull/21316
+    ) ?
+      FormikErrors<Values[K][number]>[] | string | string[]
+    : string | string[]
+  : Values[K] extends object ? FormikErrors<Values[K]>
+  : string;
 };
 
 /**
  * An object containing touched state of the form whose keys correspond to FormikValues.
  */
 export type FormikTouched<Values> = {
-  [K in keyof Values]?: Values[K] extends any[]
-    ? Values[K][number] extends object // [number] is the special sauce to get the type of array's element. More here https://github.com/Microsoft/TypeScript/pull/21316
-      ? FormikTouched<Values[K][number]>[]
-      : boolean
-    : Values[K] extends object
-    ? FormikTouched<Values[K]>
-    : boolean;
+  [K in keyof Values]?: Values[K] extends any[] ?
+    Values[K][number] extends (
+      object // [number] is the special sauce to get the type of array's element. More here https://github.com/Microsoft/TypeScript/pull/21316
+    ) ?
+      FormikTouched<Values[K][number]>[]
+    : boolean
+  : Values[K] extends object ? FormikTouched<Values[K]>
+  : boolean;
 };
 
 /**
@@ -105,7 +107,7 @@ export interface FormikHelpers<Values> {
     field: string,
     isTouched?: boolean,
     shouldValidate?: boolean
-  ) =>  Promise<void | FormikErrors<Values>>;
+  ) => Promise<void | FormikErrors<Values>>;
   /** Validate form values */
   validateForm: (values?: any) => Promise<FormikErrors<Values>>;
   /** Validate field value */
@@ -135,9 +137,9 @@ export interface FormikHandlers {
     /** Classic React blur handler, keyed by input name */
     (e: React.FocusEvent<any>): void;
     /** Preact-like linkState. Will return a handleBlur function. */
-    <T = string | any>(fieldOrEvent: T): T extends string
-      ? (e: any) => void
-      : void;
+    <T = string | any>(
+      fieldOrEvent: T
+    ): T extends string ? (e: any) => void : void;
   };
   handleChange: {
     /** Classic React change handler, keyed by input name */
@@ -145,9 +147,8 @@ export interface FormikHandlers {
     /** Preact-like linkState. Will return a handleChange function.  */
     <T = string | React.ChangeEvent<any>>(
       field: T
-    ): T extends React.ChangeEvent<any>
-      ? void
-      : (e: string | React.ChangeEvent<any>) => void;
+    ): T extends React.ChangeEvent<any> ? void
+    : (e: string | React.ChangeEvent<any>) => void;
   };
 
   getFieldProps: <Value = any>(
@@ -302,9 +303,15 @@ export interface FieldMetaProps<Value> {
 /** Imperative handles to change a field's value, error and touched */
 export interface FieldHelperProps<Value> {
   /** Set the field's value */
-  setValue: (value: Value, shouldValidate?: boolean) => Promise<void | FormikErrors<Value>>;
+  setValue: (
+    value: Value,
+    shouldValidate?: boolean
+  ) => Promise<void | FormikErrors<Value>>;
   /** Set the field's touched value */
-  setTouched: (value: boolean, shouldValidate?: boolean) => Promise<void | FormikErrors<Value>>;
+  setTouched: (
+    value: boolean,
+    shouldValidate?: boolean
+  ) => Promise<void | FormikErrors<Value>>;
   /** Set the field's error value */
   setError: (value: string | undefined) => void;
 }

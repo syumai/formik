@@ -30,7 +30,7 @@ export type FormikBag<P, V> = { props: P } & FormikHelpers<V>;
 export interface WithFormikConfig<
   Props,
   Values extends FormikValues = FormikValues,
-  DeprecatedPayload = Values
+  DeprecatedPayload = Values,
 > extends FormikSharedConfig<Props> {
   /**
    * Set the display name of the component. Useful for React DevTools.
@@ -97,7 +97,7 @@ export interface InferableComponentDecorator<TOwnProps> {
 export function withFormik<
   OuterProps extends object,
   Values extends FormikValues,
-  Payload = Values
+  Payload = Values,
 >({
   mapPropsToValues = (vanillaProps: OuterProps): Values => {
     let val: Values = {} as Values;
@@ -137,8 +137,8 @@ export function withFormik<
       };
 
       validationSchema = () => {
-        return isFunction(config.validationSchema)
-          ? config.validationSchema!(this.props)
+        return isFunction(config.validationSchema) ?
+            config.validationSchema!(this.props)
           : config.validationSchema;
       };
 

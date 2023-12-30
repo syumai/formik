@@ -22,19 +22,19 @@ export interface FieldConfig<V = any> {
    * Field component to render. Can either be a string like 'select' or a component.
    */
   component?:
-  | string
-  | React.ComponentType<FieldProps<V>>
-  | React.ComponentType
-  | React.ForwardRefExoticComponent<any>;
+    | string
+    | React.ComponentType<FieldProps<V>>
+    | React.ComponentType
+    | React.ForwardRefExoticComponent<any>;
 
   /**
    * Component to render. Can either be a string e.g. 'select', 'input', or 'textarea', or a component.
    */
   as?:
-  | React.ComponentType<FieldProps<V>['field']>
-  | string
-  | React.ComponentType
-  | React.ForwardRefExoticComponent<any>;
+    | React.ComponentType<FieldProps<V>['field']>
+    | string
+    | React.ComponentType
+    | React.ForwardRefExoticComponent<any>;
 
   /**
    * Render prop (works like React router's <Route render={props =>} />)
@@ -72,10 +72,12 @@ export interface FieldConfig<V = any> {
   innerRef?: (instance: any) => void;
 }
 
-export type FieldAttributes<T> = { className?: string; } & GenericFieldHTMLAttributes &
+export type FieldAttributes<T> = {
+  className?: string;
+} & GenericFieldHTMLAttributes &
   FieldConfig<T> &
   T & {
-    name: string,
+    name: string;
   };
 
 export type FieldHookConfig<T> = GenericFieldHTMLAttributes & FieldConfig<T>;
@@ -95,8 +97,9 @@ export function useField<Val = any>(
   const isAnObject = isObject(propsOrFieldName);
 
   // Normalize propsOrFieldName to FieldHookConfig<Val>
-  const props: FieldHookConfig<Val> = isAnObject
-    ? (propsOrFieldName as FieldHookConfig<Val>)
+  const props: FieldHookConfig<Val> =
+    isAnObject ?
+      (propsOrFieldName as FieldHookConfig<Val>)
     : { name: propsOrFieldName as string };
 
   const { name: fieldName, validate: validateFn } = props;
@@ -126,10 +129,10 @@ export function useField<Val = any>(
     'Invalid field name. Either pass `useField` a string or an object containing a `name` key.'
   );
 
-  const fieldHelpers = React.useMemo(() => getFieldHelpers(fieldName), [
-    getFieldHelpers,
-    fieldName,
-  ]);
+  const fieldHelpers = React.useMemo(
+    () => getFieldHelpers(fieldName),
+    [getFieldHelpers, fieldName]
+  );
 
   return [getFieldProps(props), getFieldMeta(fieldName), fieldHelpers];
 }
@@ -229,5 +232,9 @@ export function Field({
     );
   }
 
-  return React.createElement(asElement, { ...field, ...props, className }, children);
+  return React.createElement(
+    asElement,
+    { ...field, ...props, className },
+    children
+  );
 }

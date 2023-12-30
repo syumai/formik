@@ -32,9 +32,10 @@ export type FastFieldAttributes<T> = GenericFieldHTMLAttributes &
   FastFieldConfig<T> &
   T;
 
-type FastFieldInnerProps<Values = {}, Props = {}> = FastFieldAttributes<
-  Props
-> & { formik: FormikContextType<Values> };
+type FastFieldInnerProps<
+  Values = {},
+  Props = {},
+> = FastFieldAttributes<Props> & { formik: FormikContextType<Values> };
 
 /**
  * Custom Field component for quickly hooking into Formik

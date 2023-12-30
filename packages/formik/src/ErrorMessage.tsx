@@ -37,19 +37,18 @@ class ErrorMessageImpl extends React.Component<
     const touch = getIn(formik.touched, name);
     const error = getIn(formik.errors, name);
 
-    return !!touch && !!error
-      ? render
-        ? isFunction(render)
-          ? render(error)
+    return (
+      !!touch && !!error ?
+        render ?
+          isFunction(render) ? render(error)
           : null
-        : children
-        ? isFunction(children)
-          ? children(error)
+        : children ?
+          isFunction(children) ? children(error)
           : null
-        : component
-        ? React.createElement(component, rest as any, error)
+        : component ? React.createElement(component, rest as any, error)
         : error
-      : null;
+      : null
+    );
   }
 }
 

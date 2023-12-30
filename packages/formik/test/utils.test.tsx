@@ -310,7 +310,10 @@ describe('utils', () => {
 
     it('should keep class inheritance for the top level object', () => {
       class TestClass {
-        constructor(public key: string, public setObj?: any) {}
+        constructor(
+          public key: string,
+          public setObj?: any
+        ) {}
       }
       const obj = new TestClass('value');
       const newObj = setIn(obj, 'setObj.nested', 'setInValue');

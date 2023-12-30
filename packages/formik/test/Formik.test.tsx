@@ -73,7 +73,7 @@ function renderFormik<V extends FormikValues = Values>(
     >
       {formikProps =>
         (injected = formikProps) && (
-          <Form {...((formikProps as unknown) as FormikProps<Values>)} />
+          <Form {...(formikProps as unknown as FormikProps<Values>)} />
         )
       }
     </Formik>
@@ -92,7 +92,7 @@ function renderFormik<V extends FormikValues = Values>(
         >
           {formikProps =>
             (injected = formikProps) && (
-              <Form {...((formikProps as unknown) as FormikProps<Values>)} />
+              <Form {...(formikProps as unknown as FormikProps<Values>)} />
             )
           }
         </Formik>

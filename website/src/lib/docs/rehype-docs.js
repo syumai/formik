@@ -93,18 +93,16 @@ export default function rehypeDocs({ filePath, tag }) {
     // The URL is relative at this point
     props.className = 'relative-link';
     // Update the hash used by anchors to match the one set for headers
-    props.href = hash
-      ? `${relativePath}#${anchorSlugger.slug(hash)}`
-      : relativePath;
+    props.href =
+      hash ? `${relativePath}#${anchorSlugger.slug(hash)}` : relativePath;
 
     //turn URL to absolute path for correct doc route
     if (isDocs) {
       let absolutePath = resolve(filePath, relativePath);
       // Reset the slugger because single pages can have multiple urls to the same hash
       anchorSlugger.reset();
-      props.href = hash
-        ? `${absolutePath}#${anchorSlugger.slug(hash)}`
-        : absolutePath;
+      props.href =
+        hash ? `${absolutePath}#${anchorSlugger.slug(hash)}` : absolutePath;
       props.className = 'absolute-link';
       props.href = removeExt(
         tag ? props.href.replace('/docs', `/docs/tag/${tag}`) : props.href

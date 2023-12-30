@@ -230,13 +230,14 @@ export function useFormik<Values extends FormikValues = FormikValues>({
   const runValidationSchema = React.useCallback(
     (values: Values, field?: string): Promise<FormikErrors<Values>> => {
       const validationSchema = props.validationSchema;
-      const schema = isFunction(validationSchema)
-        ? validationSchema(field)
+      const schema =
+        isFunction(validationSchema) ?
+          validationSchema(field)
         : validationSchema;
       const promise =
-        field && schema.validateAt
-          ? schema.validateAt(field, values)
-          : validateYupSchema(values, schema);
+        field && schema.validateAt ?
+          schema.validateAt(field, values)
+        : validateYupSchema(values, schema);
       return new Promise((resolve, reject) => {
         promise.then(
           () => {
@@ -284,11 +285,11 @@ export function useFormik<Values extends FormikValues = FormikValues>({
 
       // Construct an array with all of the field validation functions
       const fieldValidations: Promise<string>[] =
-        fieldKeysWithValidation.length > 0
-          ? fieldKeysWithValidation.map(f =>
-              runSingleFieldLevelValidation(f, getIn(values, f))
-            )
-          : [Promise.resolve('DO_NOT_DELETE_YOU_WILL_BE_FIRED')]; // use special case ;)
+        fieldKeysWithValidation.length > 0 ?
+          fieldKeysWithValidation.map(f =>
+            runSingleFieldLevelValidation(f, getIn(values, f))
+          )
+        : [Promise.resolve('DO_NOT_DELETE_YOU_WILL_BE_FIRED')]; // use special case ;)
 
       return Promise.all(fieldValidations).then((fieldErrorsList: string[]) =>
         fieldErrorsList.reduce((prev, curr, index) => {
@@ -356,27 +357,21 @@ export function useFormik<Values extends FormikValues = FormikValues>({
   const resetForm = React.useCallback(
     (nextState?: Partial<FormikState<Values>>) => {
       const values =
-        nextState && nextState.values
-          ? nextState.values
-          : initialValues.current;
+        nextState && nextState.values ?
+          nextState.values
+        : initialValues.current;
       const errors =
-        nextState && nextState.errors
-          ? nextState.errors
-          : initialErrors.current
-          ? initialErrors.current
-          : props.initialErrors || {};
+        nextState && nextState.errors ? nextState.errors
+        : initialErrors.current ? initialErrors.current
+        : props.initialErrors || {};
       const touched =
-        nextState && nextState.touched
-          ? nextState.touched
-          : initialTouched.current
-          ? initialTouched.current
-          : props.initialTouched || {};
+        nextState && nextState.touched ? nextState.touched
+        : initialTouched.current ? initialTouched.current
+        : props.initialTouched || {};
       const status =
-        nextState && nextState.status
-          ? nextState.status
-          : initialStatus.current
-          ? initialStatus.current
-          : props.initialStatus;
+        nextState && nextState.status ? nextState.status
+        : initialStatus.current ? initialStatus.current
+        : props.initialStatus;
       initialValues.current = values;
       initialErrors.current = errors;
       initialTouched.current = touched;
@@ -393,11 +388,13 @@ export function useFormik<Values extends FormikValues = FormikValues>({
             values,
             isValidating: !!nextState && !!nextState.isValidating,
             submitCount:
-              !!nextState &&
-              !!nextState.submitCount &&
-              typeof nextState.submitCount === 'number'
-                ? nextState.submitCount
-                : 0,
+              (
+                !!nextState &&
+                !!nextState.submitCount &&
+                typeof nextState.submitCount === 'number'
+              ) ?
+                nextState.submitCount
+              : 0,
           },
         });
       };
@@ -417,7 +414,12 @@ export function useFormik<Values extends FormikValues = FormikValues>({
         dispatchFn();
       }
     },
-    [props.initialErrors, props.initialStatus, props.initialTouched, props.onReset]
+    [
+      props.initialErrors,
+      props.initialStatus,
+      props.initialTouched,
+      props.onReset,
+    ]
   );
 
   React.useEffect(() => {
@@ -547,8 +549,8 @@ export function useFormik<Values extends FormikValues = FormikValues>({
       dispatch({ type: 'SET_TOUCHED', payload: touched });
       const willValidate =
         shouldValidate === undefined ? validateOnBlur : shouldValidate;
-      return willValidate
-        ? validateFormWithHighPriority(state.values)
+      return willValidate ?
+          validateFormWithHighPriority(state.values)
         : Promise.resolve();
     }
   );
@@ -564,8 +566,8 @@ export function useFormik<Values extends FormikValues = FormikValues>({
       dispatch({ type: 'SET_VALUES', payload: resolvedValues });
       const willValidate =
         shouldValidate === undefined ? validateOnChange : shouldValidate;
-      return willValidate
-        ? validateFormWithHighPriority(resolvedValues)
+      return willValidate ?
+          validateFormWithHighPriority(resolvedValues)
         : Promise.resolve();
     }
   );
@@ -591,8 +593,8 @@ export function useFormik<Values extends FormikValues = FormikValues>({
       });
       const willValidate =
         shouldValidate === undefined ? validateOnChange : shouldValidate;
-      return willValidate
-        ? validateFormWithHighPriority(setIn(state.values, field, value))
+      return willValidate ?
+          validateFormWithHighPriority(setIn(state.values, field, value))
         : Promise.resolve();
     }
   );
@@ -613,22 +615,18 @@ export function useFormik<Values extends FormikValues = FormikValues>({
         if ((eventOrTextValue as any).persist) {
           (eventOrTextValue as React.ChangeEvent<any>).persist();
         }
-        const target = eventOrTextValue.target
-          ? (eventOrTextValue as React.ChangeEvent<any>).target
+        const target =
+          eventOrTextValue.target ?
+            (eventOrTextValue as React.ChangeEvent<any>).target
           : (eventOrTextValue as React.ChangeEvent<any>).currentTarget;
 
-        const {
-          type,
-          name,
-          id,
-          value,
-          checked,
-          outerHTML,
-          options,
-          multiple,
-        } = target;
+        const { type, name, id, value, checked, outerHTML, options, multiple } =
+          target;
 
-        field = maybePath ? maybePath : name ? name : id;
+        field =
+          maybePath ? maybePath
+          : name ? name
+          : id;
         if (!field && __DEV__) {
           warnAboutMissingIdentifier({
             htmlContent: outerHTML,
@@ -636,12 +634,17 @@ export function useFormik<Values extends FormikValues = FormikValues>({
             handlerName: 'handleChange',
           });
         }
-        val = /number|range/.test(type)
-          ? ((parsed = parseFloat(value)), isNaN(parsed) ? '' : parsed)
-          : /checkbox/.test(type) // checkboxes
-          ? getValueForCheckbox(getIn(state.values, field!), checked, value)
-          : options && multiple // <select multiple>
-          ? getSelectedValues(options)
+        val =
+          /number|range/.test(type) ?
+            ((parsed = parseFloat(value)), isNaN(parsed) ? '' : parsed)
+          : (
+            /checkbox/.test(type) // checkboxes
+          ) ?
+            getValueForCheckbox(getIn(state.values, field!), checked, value)
+          : (
+            options && multiple // <select multiple>
+          ) ?
+            getSelectedValues(options)
           : value;
       }
 
@@ -676,8 +679,8 @@ export function useFormik<Values extends FormikValues = FormikValues>({
       });
       const willValidate =
         shouldValidate === undefined ? validateOnBlur : shouldValidate;
-      return willValidate
-        ? validateFormWithHighPriority(state.values)
+      return willValidate ?
+          validateFormWithHighPriority(state.values)
         : Promise.resolve();
     }
   );
@@ -688,7 +691,10 @@ export function useFormik<Values extends FormikValues = FormikValues>({
         e.persist();
       }
       const { name, id, outerHTML } = e.target;
-      const field = path ? path : name ? name : id;
+      const field =
+        path ? path
+        : name ? name
+        : id;
 
       if (!field && __DEV__) {
         warnAboutMissingIdentifier({
@@ -901,9 +907,8 @@ export function useFormik<Values extends FormikValues = FormikValues>({
   const getFieldProps = React.useCallback(
     (nameOrOptions: string | FieldConfig<any>): FieldInputProps<any> => {
       const isAnObject = isObject(nameOrOptions);
-      const name = isAnObject
-        ? (nameOrOptions as FieldConfig<any>).name
-        : nameOrOptions;
+      const name =
+        isAnObject ? (nameOrOptions as FieldConfig<any>).name : nameOrOptions;
       const valueState = getIn(state.values, name);
 
       const field: FieldInputProps<any> = {
@@ -949,13 +954,12 @@ export function useFormik<Values extends FormikValues = FormikValues>({
 
   const isValid = React.useMemo(
     () =>
-      typeof isInitialValid !== 'undefined'
-        ? dirty
-          ? state.errors && Object.keys(state.errors).length === 0
-          : isInitialValid !== false && isFunction(isInitialValid)
-          ? (isInitialValid as (props: FormikConfig<Values>) => boolean)(props)
-          : (isInitialValid as boolean)
-        : state.errors && Object.keys(state.errors).length === 0,
+      typeof isInitialValid !== 'undefined' ?
+        dirty ? state.errors && Object.keys(state.errors).length === 0
+        : isInitialValid !== false && isFunction(isInitialValid) ?
+          (isInitialValid as (props: FormikConfig<Values>) => boolean)(props)
+        : (isInitialValid as boolean)
+      : state.errors && Object.keys(state.errors).length === 0,
     [isInitialValid, dirty, state.errors, props]
   );
 
@@ -999,7 +1003,7 @@ export function useFormik<Values extends FormikValues = FormikValues>({
 
 export function Formik<
   Values extends FormikValues = FormikValues,
-  ExtraProps = {}
+  ExtraProps = {},
 >(props: FormikConfig<Values> & ExtraProps) {
   const formikbag = useFormik<Values>(props);
   const { component, children, render, innerRef } = props;
@@ -1019,19 +1023,21 @@ export function Formik<
   }
   return (
     <FormikProvider value={formikbag}>
-      {component
-        ? React.createElement(component as any, formikbag)
-        : render
-        ? render(formikbag)
-        : children // children come last, always called
-        ? isFunction(children)
-          ? (children as (bag: FormikProps<Values>) => React.ReactNode)(
-              formikbag as FormikProps<Values>
-            )
-          : !isEmptyChildren(children)
-          ? React.Children.only(children)
-          : null
-        : null}
+      {component ?
+        React.createElement(component as any, formikbag)
+      : render ?
+        render(formikbag)
+      : (
+        children // children come last, always called
+      ) ?
+        isFunction(children) ?
+          (children as (bag: FormikProps<Values>) => React.ReactNode)(
+            formikbag as FormikProps<Values>
+          )
+        : !isEmptyChildren(children) ?
+          React.Children.only(children)
+        : null
+      : null}
     </FormikProvider>
   );
 }
@@ -1127,9 +1133,8 @@ function arrayMerge(target: any[], source: any[], options: any): any[] {
     if (typeof destination[i] === 'undefined') {
       const cloneRequested = options.clone !== false;
       const shouldClone = cloneRequested && options.isMergeableObject(e);
-      destination[i] = shouldClone
-        ? deepmerge(Array.isArray(e) ? [] : {}, e, options)
-        : e;
+      destination[i] =
+        shouldClone ? deepmerge(Array.isArray(e) ? [] : {}, e, options) : e;
     } else if (options.isMergeableObject(e)) {
       destination[i] = deepmerge(target[i], e, options);
     } else if (target.indexOf(e) === -1) {
@@ -1195,11 +1200,13 @@ function getValueForCheckbox(
 // useLayoutEffect in the browser.
 // @see https://gist.github.com/gaearon/e7d97cdf38a2907924ea12e4ebdf3c85
 const useIsomorphicLayoutEffect =
-  typeof window !== 'undefined' &&
-  typeof window.document !== 'undefined' &&
-  typeof window.document.createElement !== 'undefined'
-    ? React.useLayoutEffect
-    : React.useEffect;
+  (
+    typeof window !== 'undefined' &&
+    typeof window.document !== 'undefined' &&
+    typeof window.document.createElement !== 'undefined'
+  ) ?
+    React.useLayoutEffect
+  : React.useEffect;
 
 function useEventCallback<T extends (...args: any[]) => any>(fn: T): T {
   const ref: any = React.useRef(fn);

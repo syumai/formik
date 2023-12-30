@@ -54,31 +54,31 @@ function renderForm(
   };
 }
 
-const createRenderField = (
-  FieldComponent: React.ComponentType<FieldConfig>
-) => (
-  props: Partial<FieldConfig> | Partial<FastFieldConfig> = {},
-  formProps?: Partial<FormikConfig<Values>>
-) => {
-  let injected: FieldProps;
+const createRenderField =
+  (FieldComponent: React.ComponentType<FieldConfig>) =>
+  (
+    props: Partial<FieldConfig> | Partial<FastFieldConfig> = {},
+    formProps?: Partial<FormikConfig<Values>>
+  ) => {
+    let injected: FieldProps;
 
-  if (!props.children && !props.render && !props.component && !props.as) {
-    props.children = (fieldProps: FieldProps) =>
-      (injected = fieldProps) && (
-        <input {...fieldProps.field} name="name" data-testid="name-input" />
-      );
-  }
+    if (!props.children && !props.render && !props.component && !props.as) {
+      props.children = (fieldProps: FieldProps) =>
+        (injected = fieldProps) && (
+          <input {...fieldProps.field} name="name" data-testid="name-input" />
+        );
+    }
 
-  return {
-    getProps() {
-      return injected;
-    },
-    ...renderForm(
-      <FieldComponent name="name" data-testid="name-input" {...props} />,
-      formProps
-    ),
+    return {
+      getProps() {
+        return injected;
+      },
+      ...renderForm(
+        <FieldComponent name="name" data-testid="name-input" {...props} />,
+        formProps
+      ),
+    };
   };
-};
 
 const renderField = createRenderField(Field);
 const renderFastField = createRenderField(FastField);
@@ -100,10 +100,14 @@ describe('Field / FastField', () => {
 
   describe('renders an <input /> by default', () => {
     it('<Field />', () => {
-      const className = 'field-custom'
-      const { container } = renderForm(<Field name="name" className={className} />);
+      const className = 'field-custom';
+      const { container } = renderForm(
+        <Field name="name" className={className} />
+      );
       expect(container.querySelectorAll('input')).toHaveLength(1);
-      expect(container.querySelector(`.${className}`)?.getAttribute('value')).toEqual('jared')
+      expect(
+        container.querySelector(`.${className}`)?.getAttribute('value')
+      ).toEqual('jared');
     });
 
     it('<FastField />', () => {
@@ -114,17 +118,25 @@ describe('Field / FastField', () => {
 
   describe('renders an <input /> with className', () => {
     it('<Field />', () => {
-      const className = 'field-custom'
-      const { container } = renderForm(<Field name="name" className={className} />);
-      expect(container.querySelectorAll(`.${className}`)).toHaveLength(1)
-      expect(container.querySelector(`.${className}`)?.getAttribute('value')).toEqual('jared')
+      const className = 'field-custom';
+      const { container } = renderForm(
+        <Field name="name" className={className} />
+      );
+      expect(container.querySelectorAll(`.${className}`)).toHaveLength(1);
+      expect(
+        container.querySelector(`.${className}`)?.getAttribute('value')
+      ).toEqual('jared');
     });
 
     it('<FastField />', () => {
-      const className = 'field-custom'
-      const { container } = renderForm(<FastField name="name" className={className} />);
-      expect(container.querySelectorAll(`.${className}`)).toHaveLength(1)
-      expect(container.querySelector(`.${className}`)?.getAttribute('value')).toEqual('jared')
+      const className = 'field-custom';
+      const { container } = renderForm(
+        <FastField name="name" className={className} />
+      );
+      expect(container.querySelectorAll(`.${className}`)).toHaveLength(1);
+      expect(
+        container.querySelector(`.${className}`)?.getAttribute('value')
+      ).toEqual('jared');
     });
   });
 

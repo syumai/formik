@@ -191,11 +191,11 @@ class FieldArrayInner<Values = {}> extends React.Component<
         fn(getIn(prevState.values, name))
       );
 
-      let fieldError = alterErrors
-        ? updateErrors(getIn(prevState.errors, name))
-        : undefined;
-      let fieldTouched = alterTouched
-        ? updateTouched(getIn(prevState.touched, name))
+      let fieldError =
+        alterErrors ? updateErrors(getIn(prevState.errors, name)) : undefined;
+      let fieldTouched =
+        alterTouched ?
+          updateTouched(getIn(prevState.touched, name))
         : undefined;
 
       if (isEmptyArray(fieldError)) {
@@ -208,11 +208,13 @@ class FieldArrayInner<Values = {}> extends React.Component<
       return {
         ...prevState,
         values,
-        errors: alterErrors
-          ? setIn(prevState.errors, name, fieldError)
+        errors:
+          alterErrors ?
+            setIn(prevState.errors, name, fieldError)
           : prevState.errors,
-        touched: alterTouched
-          ? setIn(prevState.touched, name, fieldTouched)
+        touched:
+          alterTouched ?
+            setIn(prevState.touched, name, fieldTouched)
           : prevState.touched,
       };
     });
@@ -301,11 +303,13 @@ class FieldArrayInner<Values = {}> extends React.Component<
           copy.splice(index, 1);
         }
         // if the array only includes undefined values we have to return an empty array
-        return isFunction(copy.every)
-          ? copy.every(v => v === undefined)
-            ? []
+        return (
+          isFunction(copy.every) ?
+            copy.every(v => v === undefined) ?
+              []
             : copy
-          : copy;
+          : copy
+        );
       },
       true,
       true
@@ -375,17 +379,17 @@ class FieldArrayInner<Values = {}> extends React.Component<
       name,
     };
 
-    return component
-      ? React.createElement(component as any, props)
-      : render
-      ? (render as any)(props)
-      : children // children come last, always called
-      ? typeof children === 'function'
-        ? (children as any)(props)
-        : !isEmptyChildren(children)
-        ? React.Children.only(children)
+    return (
+      component ? React.createElement(component as any, props)
+      : render ? (render as any)(props)
+      : (
+        children // children come last, always called
+      ) ?
+        typeof children === 'function' ? (children as any)(props)
+        : !isEmptyChildren(children) ? React.Children.only(children)
         : null
-      : null;
+      : null
+    );
   }
 }
 
